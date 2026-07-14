@@ -97,21 +97,39 @@ mediaButton.className = "media-card-button";
 mediaButton.type = "button";
 mediaButton.setAttribute("aria-label", `Open ${post.title} fullscreen`);
 
-const image = document.createElement("img");
-image.src = post.mediaUrl;
-image.alt = post.title;
-image.loading = "lazy";
+let mediaPreview;
 
-mediaButton.append(image);
+if (post.mediaType === "video") {
+  mediaPreview = document.createElement("video");
+  mediaPreview.src = post.mediaUrl;
+  mediaPreview.muted = true;
+  mediaPreview.preload = "metadata";
+} else {
+  mediaPreview = document.createElement("img");
+  mediaPreview.src = post.mediaUrl;
+  mediaPreview.alt = post.title;
+  mediaPreview.loading = "lazy";
+}
+
+mediaButton.append(mediaPreview);
 
 mediaButton.addEventListener("click", () => {
   viewerContent.innerHTML = "";
 
-  const fullscreenImage = document.createElement("img");
-  fullscreenImage.src = post.mediaUrl;
-  fullscreenImage.alt = post.title;
+  let fullscreenMedia;
 
-  viewerContent.append(fullscreenImage);
+  if (post.mediaType === "video") {
+    fullscreenMedia = document.createElement("video");
+    fullscreenMedia.src = post.mediaUrl;
+    fullscreenMedia.controls = true;
+    fullscreenMedia.autoplay = true;
+  } else {
+    fullscreenMedia = document.createElement("img");
+    fullscreenMedia.src = post.mediaUrl;
+    fullscreenMedia.alt = post.title;
+  }
+
+  viewerContent.append(fullscreenMedia);
   fullscreenViewer.hidden = false;
 });
     const content = document.createElement("div");
@@ -147,7 +165,14 @@ favoriteButton.addEventListener("click", () => {
   renderPosts();
 });
 
-content.append(title, metadata, favoriteButton);
+const postLink = document.createElement("a");
+postLink.className = "post-link";
+postLink.href = post.postUrl;
+postLink.target = "_blank";
+postLink.rel = "noopener noreferrer";
+postLink.textContent = "Open original post";
+
+content.append(title, metadata, favoriteButton, postLink);
     card.append(mediaButton, content);
     mediaGallery.append(card);
   }
@@ -210,6 +235,14 @@ list.append(allItem);
 }
 
 function closeViewer() {
+  const activeVideo = viewerContent.querySelector("video");
+
+  if (activeVideo) {
+    activeVideo.pause();
+    activeVideo.removeAttribute("src");
+    activeVideo.load();
+  }
+
   fullscreenViewer.hidden = true;
   viewerContent.innerHTML = "";
 }
