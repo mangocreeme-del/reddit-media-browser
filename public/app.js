@@ -159,7 +159,20 @@ viewerContent.append(fullscreenMedia);
 });
     const content = document.createElement("div");
     content.className = "media-card-content";
+const mediaBadge = document.createElement("span");
+mediaBadge.className = "media-badge";
 
+if (post.mediaType === "gallery") {
+  const imageCount = Array.isArray(post.galleryUrls)
+    ? post.galleryUrls.length
+    : 0;
+
+  mediaBadge.textContent = `Gallery · ${imageCount} images`;
+} else if (post.mediaType === "video") {
+  mediaBadge.textContent = "Video";
+} else {
+  mediaBadge.textContent = "Image";
+}
     const title = document.createElement("h3");
     title.className = "media-card-title";
     title.textContent = post.title;
@@ -197,7 +210,13 @@ postLink.target = "_blank";
 postLink.rel = "noopener noreferrer";
 postLink.textContent = "Open original post";
 
-content.append(title, metadata, favoriteButton, postLink);
+content.append(
+  mediaBadge,
+  title,
+  metadata,
+  favoriteButton,
+  postLink
+);
     card.append(mediaButton, content);
     mediaGallery.append(card);
   }

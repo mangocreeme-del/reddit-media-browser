@@ -372,3 +372,14 @@ label {
   border-radius: 10px;
   object-fit: contain;
 }
+.media-badge {
+  display: inline-block;
+  margin-bottom: 0.65rem;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-light);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
