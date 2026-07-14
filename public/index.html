@@ -56,36 +56,43 @@
       </form>
 
       <section class="controls" aria-label="Media controls">
-        <label for="title-search-input">Search titles</label>
+  <div class="control-group control-group-wide">
+    <label for="title-search-input">Search titles</label>
 
-        <input
-          id="title-search-input"
-          type="search"
-          placeholder="Filter by post title"
-        >
+    <input
+      id="title-search-input"
+      type="search"
+      placeholder="Filter by post title"
+    >
+  </div>
 
-        <label for="sort-select">Sort by</label>
+  <div class="control-group">
+    <label for="sort-select">Sort by</label>
 
-        <select id="sort-select">
-          <option value="date-desc">Newest</option>
-          <option value="date-asc">Oldest</option>
-          <option value="score-desc">Highest score</option>
-          <option value="comments-desc">Most comments</option>
-        </select>
+    <select id="sort-select">
+      <option value="date-desc">Newest</option>
+      <option value="date-asc">Oldest</option>
+      <option value="score-desc">Highest score</option>
+      <option value="comments-desc">Most comments</option>
+    </select>
+  </div>
 
-        <label for="media-filter-select">Media type</label>
+  <div class="control-group">
+    <label for="media-filter-select">Media type</label>
 
-        <select id="media-filter-select">
-          <option value="all">All media</option>
-          <option value="image">Images</option>
-          <option value="gallery">Galleries</option>
-          <option value="video">Videos</option>
-        </select>
-<label class="favorites-filter">
-  <input id="favorites-only-checkbox" type="checkbox">
-  Favorites only
-</label>
-      </section>
+    <select id="media-filter-select">
+      <option value="all">All media</option>
+      <option value="image">Images</option>
+      <option value="gallery">Galleries</option>
+      <option value="video">Videos</option>
+    </select>
+  </div>
+
+  <label class="favorites-filter">
+    <input id="favorites-only-checkbox" type="checkbox">
+    Favorites only
+  </label>
+</section>
 
       <section id="status-message" role="status">
         Search for a Reddit user to begin.
