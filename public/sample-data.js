@@ -47,5 +47,16 @@ window.samplePosts = [
       "https://images.unsplash.com/photo-1500534623283-312aade485b7"
     ],
     postUrl: "https://www.reddit.com/"
+  },
+  {
+    id: "sample-5",
+    title: "Flower moving in the wind",
+    subreddit: "NatureVideos",
+    score: 715,
+    commentCount: 29,
+    createdUtc: 1752062400,
+    mediaType: "video",
+    mediaUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    postUrl: "https://www.reddit.com/"
   }
 ];
