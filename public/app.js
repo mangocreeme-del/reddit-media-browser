@@ -99,14 +99,21 @@ mediaButton.setAttribute("aria-label", `Open ${post.title} fullscreen`);
 
 let mediaPreview;
 
+const primaryMediaUrl =
+  post.mediaType === "gallery" &&
+  Array.isArray(post.galleryUrls) &&
+  post.galleryUrls.length > 0
+    ? post.galleryUrls[0]
+    : post.mediaUrl;
+
 if (post.mediaType === "video") {
   mediaPreview = document.createElement("video");
-  mediaPreview.src = post.mediaUrl;
+  mediaPreview.src = primaryMediaUrl;
   mediaPreview.muted = true;
   mediaPreview.preload = "metadata";
 } else {
   mediaPreview = document.createElement("img");
-  mediaPreview.src = post.mediaUrl;
+  mediaPreview.src = primaryMediaUrl;
   mediaPreview.alt = post.title;
   mediaPreview.loading = "lazy";
 }
@@ -118,18 +125,36 @@ mediaButton.addEventListener("click", () => {
 
   let fullscreenMedia;
 
-  if (post.mediaType === "video") {
-    fullscreenMedia = document.createElement("video");
-    fullscreenMedia.src = post.mediaUrl;
-    fullscreenMedia.controls = true;
-    fullscreenMedia.autoplay = true;
-  } else {
-    fullscreenMedia = document.createElement("img");
-    fullscreenMedia.src = post.mediaUrl;
-    fullscreenMedia.alt = post.title;
+  if (
+  post.mediaType === "gallery" &&
+  Array.isArray(post.galleryUrls) &&
+  post.galleryUrls.length > 0
+) {
+  const galleryViewer = document.createElement("div");
+  galleryViewer.className = "fullscreen-gallery";
+
+  for (const galleryUrl of post.galleryUrls) {
+    const galleryImage = document.createElement("img");
+    galleryImage.src = galleryUrl;
+    galleryImage.alt = post.title;
+    galleryImage.loading = "lazy";
+
+    galleryViewer.append(galleryImage);
   }
 
-  viewerContent.append(fullscreenMedia);
+  fullscreenMedia = galleryViewer;
+} else if (post.mediaType === "video") {
+  fullscreenMedia = document.createElement("video");
+  fullscreenMedia.src = post.mediaUrl;
+  fullscreenMedia.controls = true;
+  fullscreenMedia.autoplay = true;
+} else {
+  fullscreenMedia = document.createElement("img");
+  fullscreenMedia.src = post.mediaUrl;
+  fullscreenMedia.alt = post.title;
+}
+
+viewerContent.append(fullscreenMedia);
   fullscreenViewer.hidden = false;
 });
     const content = document.createElement("div");

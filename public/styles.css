@@ -357,3 +357,18 @@ label {
 .post-link:hover {
   text-decoration: underline;
 }
+.fullscreen-gallery {
+  display: grid;
+  gap: 1rem;
+  width: min(1100px, 100%);
+  max-height: 90vh;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.fullscreen-gallery img {
+  width: 100%;
+  max-height: none;
+  border-radius: 10px;
+  object-fit: contain;
+}
