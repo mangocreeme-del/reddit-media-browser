@@ -166,6 +166,7 @@ label {
   background: var(--surface);
 }
 
+
 .media-card img,
 .media-card video {
   display: block;
@@ -261,4 +262,85 @@ label {
   .content {
     padding: 1rem;
   }
+}
+.media-card-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.media-card-button:hover {
+  background: transparent;
+}
+
+.media-card-button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+#subreddit-list ul {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.subreddit-button {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  font-weight: 600;
+}
+
+.subreddit-button:hover {
+  background: var(--surface-light);
+  color: var(--text);
+}
+
+.subreddit-button.active {
+  border-color: var(--accent);
+  background: var(--surface-light);
+  color: var(--text);
+}
+.favorite-button {
+  width: 100%;
+  margin-top: 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface-light);
+  color: var(--text);
+}
+
+.favorite-button:hover {
+  border-color: var(--accent);
+  background: var(--surface-light);
+}
+
+.favorites-filter {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  align-self: end;
+  min-height: 42px;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-light);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.favorites-filter input {
+  width: auto;
+  margin: 0;
+  accent-color: var(--accent);
 }

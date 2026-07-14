@@ -3,6 +3,9 @@ const usernameInput = document.querySelector("#username-input");
 const titleSearchInput = document.querySelector("#title-search-input");
 const sortSelect = document.querySelector("#sort-select");
 const mediaFilterSelect = document.querySelector("#media-filter-select");
+const favoritesOnlyCheckbox = document.querySelector(
+  "#favorites-only-checkbox"
+);
 const statusMessage = document.querySelector("#status-message");
 const mediaGallery = document.querySelector("#media-gallery");
 const subredditList = document.querySelector("#subreddit-list");
@@ -11,8 +14,20 @@ const fullscreenViewer = document.querySelector("#fullscreen-viewer");
 const viewerContent = document.querySelector("#viewer-content");
 const viewerCloseButton = document.querySelector("#viewer-close-button");
 
-let loadedPosts = [];
+let loadedPosts = Array.isArray(window.samplePosts)
+  ? window.samplePosts
+  : [];
+let selectedSubreddit = "all";
+let favoritePostIds = new Set(
+  JSON.parse(localStorage.getItem("favoritePostIds") || "[]")
+);
 
+function saveFavorites() {
+  localStorage.setItem(
+    "favoritePostIds",
+    JSON.stringify([...favoritePostIds])
+  );
+}
 function setStatus(message) {
   statusMessage.textContent = message;
 }
@@ -22,16 +37,28 @@ function renderPosts() {
 
   const titleQuery = titleSearchInput.value.trim().toLowerCase();
   const mediaFilter = mediaFilterSelect.value;
-  const sortMethod = sortSelect.value;
+const sortMethod = sortSelect.value;
+const favoritesOnly = favoritesOnlyCheckbox.checked;
 
   let visiblePosts = loadedPosts.filter((post) => {
     const matchesTitle = post.title.toLowerCase().includes(titleQuery);
     const matchesMedia =
-      mediaFilter === "all" || post.mediaType === mediaFilter;
+  mediaFilter === "all" || post.mediaType === mediaFilter;
 
-    return matchesTitle && matchesMedia;
-  });
+const matchesSubreddit =
+  selectedSubreddit === "all" ||
+  post.subreddit === selectedSubreddit;
 
+const matchesFavorite =
+  !favoritesOnly || favoritePostIds.has(post.id);
+
+return (
+  matchesTitle &&
+  matchesMedia &&
+  matchesSubreddit &&
+  matchesFavorite
+);
+});
   visiblePosts = [...visiblePosts].sort((firstPost, secondPost) => {
     switch (sortMethod) {
       case "date-asc":
@@ -65,6 +92,28 @@ function renderPosts() {
     const card = document.createElement("article");
     card.className = "media-card";
 
+const mediaButton = document.createElement("button");
+mediaButton.className = "media-card-button";
+mediaButton.type = "button";
+mediaButton.setAttribute("aria-label", `Open ${post.title} fullscreen`);
+
+const image = document.createElement("img");
+image.src = post.mediaUrl;
+image.alt = post.title;
+image.loading = "lazy";
+
+mediaButton.append(image);
+
+mediaButton.addEventListener("click", () => {
+  viewerContent.innerHTML = "";
+
+  const fullscreenImage = document.createElement("img");
+  fullscreenImage.src = post.mediaUrl;
+  fullscreenImage.alt = post.title;
+
+  viewerContent.append(fullscreenImage);
+  fullscreenViewer.hidden = false;
+});
     const content = document.createElement("div");
     content.className = "media-card-content";
 
@@ -78,8 +127,28 @@ function renderPosts() {
       `r/${post.subreddit} · ${post.score} points · ` +
       `${post.commentCount} comments`;
 
-    content.append(title, metadata);
-    card.append(content);
+    const favoriteButton = document.createElement("button");
+const isFavorite = favoritePostIds.has(post.id);
+
+favoriteButton.type = "button";
+favoriteButton.className = "favorite-button";
+favoriteButton.textContent = isFavorite
+  ? "★ Remove favorite"
+  : "☆ Add favorite";
+
+favoriteButton.addEventListener("click", () => {
+  if (favoritePostIds.has(post.id)) {
+    favoritePostIds.delete(post.id);
+  } else {
+    favoritePostIds.add(post.id);
+  }
+
+  saveFavorites();
+  renderPosts();
+});
+
+content.append(title, metadata, favoriteButton);
+    card.append(mediaButton, content);
     mediaGallery.append(card);
   }
 }
@@ -100,12 +169,42 @@ function renderSubreddits() {
   }
 
   const list = document.createElement("ul");
+const allItem = document.createElement("li");
+const allButton = document.createElement("button");
 
+allButton.type = "button";
+allButton.textContent = `All (${loadedPosts.length})`;
+allButton.className =
+  selectedSubreddit === "all" ? "subreddit-button active" : "subreddit-button";
+
+allButton.addEventListener("click", () => {
+  selectedSubreddit = "all";
+  renderSubreddits();
+  renderPosts();
+});
+
+allItem.append(allButton);
+list.append(allItem);
   for (const [subreddit, count] of subredditCounts) {
-    const item = document.createElement("li");
-    item.textContent = `r/${subreddit} (${count})`;
-    list.append(item);
-  }
+  const item = document.createElement("li");
+  const button = document.createElement("button");
+
+  button.type = "button";
+  button.textContent = `r/${subreddit} (${count})`;
+  button.className =
+    selectedSubreddit === subreddit
+      ? "subreddit-button active"
+      : "subreddit-button";
+
+  button.addEventListener("click", () => {
+    selectedSubreddit = subreddit;
+    renderSubreddits();
+    renderPosts();
+  });
+
+  item.append(button);
+  list.append(item);
+}
 
   subredditList.append(list);
 }
@@ -133,6 +232,7 @@ userSearchForm.addEventListener("submit", (event) => {
 titleSearchInput.addEventListener("input", renderPosts);
 sortSelect.addEventListener("change", renderPosts);
 mediaFilterSelect.addEventListener("change", renderPosts);
+favoritesOnlyCheckbox.addEventListener("change", renderPosts);
 
 loginButton.addEventListener("click", () => {
   setStatus("Reddit OAuth login will be connected next.");
