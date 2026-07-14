@@ -39,11 +39,12 @@ app.get("/api/health", (request, response) => {
   });
 });
 app.get("/api/reddit/status", (request, response) => {
-  const configured = Boolean(
-    process.env.REDDIT_CLIENT_ID &&
-    process.env.REDDIT_CLIENT_SECRET &&
-    process.env.REDDIT_REDIRECT_URI
-  );
+const configured = Boolean(
+  process.env.REDDIT_CLIENT_ID &&
+  process.env.REDDIT_CLIENT_SECRET &&
+  process.env.REDDIT_REDIRECT_URI &&
+  process.env.REDDIT_USER_AGENT
+);
 
   response.json({
     configured,
