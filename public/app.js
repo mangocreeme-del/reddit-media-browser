@@ -304,9 +304,24 @@ userSearchForm.addEventListener("submit", (event) => {
     return;
   }
 
-  setStatus(
-    `Ready to search u/${username}. Reddit API access will be connected next.`
-  );
+  mediaGallery.innerHTML = "";
+  subredditList.innerHTML = "<p>Loading…</p>";
+  setStatus(`Loading posts from u/${username}…`);
+
+  window.setTimeout(() => {
+    loadedPosts = Array.isArray(window.samplePosts)
+      ? window.samplePosts
+      : [];
+
+    selectedSubreddit = "all";
+
+    renderSubreddits();
+    renderPosts();
+
+    setStatus(
+      `Loaded ${loadedPosts.length} sample media posts for u/${username}.`
+    );
+  }, 500);
 });
 
 titleSearchInput.addEventListener("input", renderPosts);
