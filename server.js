@@ -3,6 +3,7 @@ import session from "express-session";
 import dotenv from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import samplePosts from "./data/sample-posts.js";
 
 dotenv.config();
 
@@ -35,6 +36,21 @@ app.get("/api/health", (request, response) => {
   response.json({
     status: "ok",
     message: "Reddit Media Browser server is running."
+  });
+});
+app.get("/api/users/:username/posts", (request, response) => {
+  const username = request.params.username.trim();
+
+  if (!username) {
+    return response.status(400).json({
+      error: "A Reddit username is required."
+    });
+  }
+
+  return response.json({
+    username,
+    source: "sample",
+    posts: samplePosts
   });
 });
 

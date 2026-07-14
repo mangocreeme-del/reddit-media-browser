@@ -294,7 +294,7 @@ function closeViewer() {
   viewerContent.innerHTML = "";
 }
 
-userSearchForm.addEventListener("submit", (event) => {
+userSearchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
   const username = usernameInput.value.trim();
@@ -308,20 +308,32 @@ userSearchForm.addEventListener("submit", (event) => {
   subredditList.innerHTML = "<p>Loading…</p>";
   setStatus(`Loading posts from u/${username}…`);
 
-  window.setTimeout(() => {
-    loadedPosts = Array.isArray(window.samplePosts)
-      ? window.samplePosts
-      : [];
+  try {
+    const response = await fetch(
+      `/api/users/${encodeURIComponent(username)}/posts`
+    );
 
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Unable to load posts.");
+    }
+
+    loadedPosts = Array.isArray(data.posts) ? data.posts : [];
     selectedSubreddit = "all";
 
     renderSubreddits();
     renderPosts();
 
     setStatus(
-      `Loaded ${loadedPosts.length} sample media posts for u/${username}.`
+      `Loaded ${loadedPosts.length} media posts for u/${data.username}.`
     );
-  }, 500);
+  } catch (error) {
+    loadedPosts = [];
+    renderSubreddits();
+    renderPosts();
+    setStatus(error.message);
+  }
 });
 
 titleSearchInput.addEventListener("input", renderPosts);

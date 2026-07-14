@@ -1,4 +1,4 @@
-window.samplePosts = [
+const samplePosts = [
   {
     id: "sample-1",
     title: "Mountain lake at sunrise",
@@ -7,7 +7,8 @@ window.samplePosts = [
     commentCount: 112,
     createdUtc: 1752408000,
     mediaType: "image",
-    mediaUrl: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    mediaUrl:
+      "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
     postUrl: "https://www.reddit.com/"
   },
   {
@@ -18,7 +19,8 @@ window.samplePosts = [
     commentCount: 84,
     createdUtc: 1752321600,
     mediaType: "image",
-    mediaUrl: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df",
+    mediaUrl:
+      "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df",
     postUrl: "https://www.reddit.com/"
   },
   {
@@ -29,7 +31,8 @@ window.samplePosts = [
     commentCount: 37,
     createdUtc: 1752235200,
     mediaType: "image",
-    mediaUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
+    mediaUrl:
+      "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
     postUrl: "https://www.reddit.com/"
   },
   {
@@ -40,7 +43,8 @@ window.samplePosts = [
     commentCount: 58,
     createdUtc: 1752148800,
     mediaType: "gallery",
-    mediaUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+    mediaUrl:
+      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
     galleryUrls: [
       "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
       "https://images.unsplash.com/photo-1473116763249-2faaef81ccda",
@@ -56,7 +60,10 @@ window.samplePosts = [
     commentCount: 29,
     createdUtc: 1752062400,
     mediaType: "video",
-    mediaUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+    mediaUrl:
+      "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
     postUrl: "https://www.reddit.com/"
   }
 ];
+
+export default samplePosts;
