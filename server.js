@@ -4,6 +4,10 @@ import dotenv from "dotenv";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import samplePosts from "./data/sample-posts.js";
+import {
+  createOAuthState,
+  createRedditAuthorizationUrl
+} from "./services/reddit-oauth.js";
 
 dotenv.config();
 
@@ -65,6 +69,29 @@ app.get("/api/users/:username/posts", (request, response) => {
     source: "sample",
     posts: samplePosts
   });
+});
+
+app.get("/auth/reddit", (request, response) => {
+  const configured = Boolean(
+    process.env.REDDIT_CLIENT_ID &&
+    process.env.REDDIT_CLIENT_SECRET &&
+    process.env.REDDIT_REDIRECT_URI &&
+    process.env.REDDIT_USER_AGENT
+  );
+
+  if (!configured) {
+    return response.status(503).json({
+      error: "Reddit OAuth is not configured yet."
+    });
+  }
+
+  const state = createOAuthState();
+
+  request.session.redditOAuthState = state;
+
+  return response.redirect(
+    createRedditAuthorizationUrl(state)
+  );
 });
 
 app.use((request, response) => {

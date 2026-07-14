@@ -371,7 +371,7 @@ mediaFilterSelect.addEventListener("change", renderPosts);
 favoritesOnlyCheckbox.addEventListener("change", renderPosts);
 
 loginButton.addEventListener("click", () => {
-  setStatus("Reddit OAuth login will be connected next.");
+  window.location.href = "/auth/reddit";
 });
 
 viewerCloseButton.addEventListener("click", closeViewer);
