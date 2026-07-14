@@ -14,6 +14,35 @@ const fullscreenViewer = document.querySelector("#fullscreen-viewer");
 const viewerContent = document.querySelector("#viewer-content");
 const viewerCloseButton = document.querySelector("#viewer-close-button");
 
+async function loadRedditStatus() {
+  try {
+    const response = await fetch("/api/reddit/status");
+    const status = await response.json();
+
+    if (!response.ok) {
+      throw new Error(status.error || "Unable to check Reddit status.");
+    }
+
+    if (!status.configured) {
+      loginButton.disabled = true;
+      loginButton.textContent = "Reddit approval pending";
+      return;
+    }
+
+    if (status.authenticated) {
+      loginButton.disabled = false;
+      loginButton.textContent = "Connected to Reddit";
+      return;
+    }
+
+    loginButton.disabled = false;
+    loginButton.textContent = "Sign in with Reddit";
+  } catch {
+    loginButton.disabled = true;
+    loginButton.textContent = "Reddit status unavailable";
+  }
+}
+
 let loadedPosts = Array.isArray(window.samplePosts)
   ? window.samplePosts
   : [];
@@ -361,3 +390,4 @@ document.addEventListener("keydown", (event) => {
 
 renderSubreddits();
 renderPosts();
+loadRedditStatus();

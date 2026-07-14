@@ -38,6 +38,18 @@ app.get("/api/health", (request, response) => {
     message: "Reddit Media Browser server is running."
   });
 });
+app.get("/api/reddit/status", (request, response) => {
+  const configured = Boolean(
+    process.env.REDDIT_CLIENT_ID &&
+    process.env.REDDIT_CLIENT_SECRET &&
+    process.env.REDDIT_REDIRECT_URI
+  );
+
+  response.json({
+    configured,
+    authenticated: Boolean(request.session.redditAccessToken)
+  });
+});
 app.get("/api/users/:username/posts", (request, response) => {
   const username = request.params.username.trim();
 
