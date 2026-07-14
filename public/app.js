@@ -117,7 +117,10 @@ if (post.mediaType === "video") {
   mediaPreview.alt = post.title;
   mediaPreview.loading = "lazy";
 }
-
+mediaPreview.addEventListener("error", () => {
+  mediaButton.classList.add("media-error");
+  mediaButton.textContent = "Media failed to load";
+});
 mediaButton.append(mediaPreview);
 
 mediaButton.addEventListener("click", () => {

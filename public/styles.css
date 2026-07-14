@@ -383,3 +383,12 @@ label {
   font-size: 0.75rem;
   font-weight: 700;
 }
+.media-error {
+  display: grid;
+  place-items: center;
+  min-height: 230px;
+  padding: 1rem;
+  background: var(--surface-light);
+  color: var(--danger);
+  text-align: center;
+}
